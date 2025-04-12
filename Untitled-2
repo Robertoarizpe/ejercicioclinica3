@@ -1,0 +1,112 @@
+import { useState } from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+
+export default function SaludVitalApp() {
+  const [formData, setFormData] = useState({
+    nombre: '',
+    edad: '',
+    sexo: '',
+    tipoSangre: '',
+    ocupacion: '',
+    estadoCivil: '',
+    contacto: '',
+    email: '',
+    motivoCita: '',
+    tipoEnfermedad: '',
+    urgencia: '',
+    fecha: '',
+    hora: '',
+    tipoConsulta: '',
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await fetch("https://script.google.com/macros/s/AKfycbyBJa1aNEH4SzMT4acUPH7m1uQtE7g1QhRvRtfwUevJOiDoBTKHSuuYrRI2C_SK4rOr6A/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      alert("✅ Cita registrada con éxito");
+    } catch (error) {
+      console.error("Error al enviar datos:", error);
+      alert("❌ Ocurrió un error al registrar la cita");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-white text-gray-900 p-6" style={{ backgroundColor: '#f3faf7' }}>
+      <div className="text-center mb-4">
+        <img src="https://cdn.pixabay.com/photo/2017/01/31/13/14/tooth-2029818_1280.png" alt="Salud Dental" className="mx-auto h-24" />
+      </div>
+      <h1 className="text-3xl font-bold mb-6 text-center text-green-700">Salud Vital - Registro de Citas</h1>
+      <Card className="max-w-4xl mx-auto shadow-xl rounded-2xl">
+        <CardContent className="p-6">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input name="nombre" placeholder="🧑 Nombre completo" onChange={handleChange} required />
+            <Input name="edad" type="number" placeholder="🎂 Edad" onChange={handleChange} required />
+
+            <div>
+              <Label htmlFor="sexo">⚧️ Sexo</Label>
+              <select name="sexo" onChange={handleChange} required className="w-full p-2 border rounded">
+                <option value="">Seleccione</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+
+            <Input name="tipoSangre" placeholder="🩸 Tipo de sangre" onChange={handleChange} required />
+            <Input name="ocupacion" placeholder="💼 Ocupación" onChange={handleChange} />
+            <Input name="estadoCivil" placeholder="💍 Estado civil" onChange={handleChange} />
+            <Input name="contacto" placeholder="📞 Número de contacto" onChange={handleChange} required />
+            <Input name="email" type="email" placeholder="📧 Correo electrónico" onChange={handleChange} required />
+            <Textarea name="motivoCita" placeholder="📋 Motivo de la cita" onChange={handleChange} required />
+            <Input name="tipoEnfermedad" placeholder="🤒 Tipo de enfermedad (si aplica)" onChange={handleChange} />
+
+            <div>
+              <Label htmlFor="urgencia">🚨 Nivel de urgencia</Label>
+              <select name="urgencia" onChange={handleChange} required className="w-full p-2 border rounded">
+                <option value="">Seleccione</option>
+                <option value="Baja">Baja</option>
+                <option value="Media">Media</option>
+                <option value="Alta">Alta</option>
+              </select>
+            </div>
+
+            <Input name="fecha" type="date" onChange={handleChange} required />
+            <Input name="hora" type="time" onChange={handleChange} required />
+
+            <div>
+              <Label htmlFor="tipoConsulta">🏥 Tipo de consulta</Label>
+              <select name="tipoConsulta" onChange={handleChange} required className="w-full p-2 border rounded">
+                <option value="">Seleccione</option>
+                <option value="General">Consulta general</option>
+                <option value="Especialidad">Especialidad</option>
+                <option value="Otro">Otra</option>
+              </select>
+            </div>
+
+            <div className="md:col-span-2 text-center mt-4">
+              <Button type="submit" className="bg-green-700 text-white hover:bg-green-800">Registrar cita</Button>
+            </div>
+          </form>
+          <div className="mt-6 text-center text-sm text-gray-700">
+            ¿Necesitas ayuda? Contáctanos por WhatsApp al <a href="https://wa.me/528334035471" className="text-green-700 font-semibold">+52 833 403 5471</a>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
